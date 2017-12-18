@@ -1,0 +1,20 @@
+{
+  "name": "natBot",
+  "version": "0.0.1",
+  "description": "A bot for times when you don't have enough Nat in your life ",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Dave Schumaker OG - Eric Friday",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "3.5.1",
+    "twitter": "1.7.1"
+  }
+}
