@@ -40,8 +40,7 @@ module.exports = {
   // Example, build word dictionary. Start watching stream, etc.
   init: function() {
     // Load up robot settings.
-    console.log('\n\nNODEEBOT FOR NODEJS v', global.botVersion);
-    console.log('by Dave Schumaker (@davely)\n');
+    console.log('NATBOT', global.botVersion);
     console.log('-== CONFIG SETTINGS ==-');
     console.log(' -Post to Twitter? ' + config.settings.postTweets);
     console.log(' -Repond to DMs? ' + config.settings.respondDMs);
@@ -88,7 +87,7 @@ module.exports = {
       setInterval(function() {
         console.log(generator.makeTweet(140));
         self.robotTasks();
-      }, 5000);
+      }, 10000);
     })
     .catch(function(err) {
       if (err.code === 'ENOENT') {

@@ -272,7 +272,7 @@ module.exports = {
     var curTime = Math.floor(Date.now() / 1000);
     // It's been longer than around 120 seconds since we've seen a tweet. Let's restart the stream.
     // console.log('[' + utils.currentTime() + '] Debug - lastTweetReceivedTime: ', config.settings.lastTweetReceivedTime);
-    if (curTime - config.settings.lastTweetReceivedTime >= 120) {
+    if (curTime - config.settings.lastTweetReceivedTime >= 120000) {
       console.log('Stream may have dropped. Restarting stream...');
       this.watchStream();
     }
