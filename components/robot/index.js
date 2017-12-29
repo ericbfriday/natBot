@@ -85,9 +85,9 @@ module.exports = {
       *  etc.
       */
       setInterval(function() {
-        console.log(generator.makeTweet(140));
+        console.log(generator.makeTweet(200));
         self.robotTasks();
-      }, 10000);
+      }, 61000);
     })
     .catch(function(err) {
       if (err.code === 'ENOENT') {
@@ -120,7 +120,7 @@ module.exports = {
     // If so, post a tweet!
     if (config.settings.tweetOnStartup) {
       robotActions.lastTweet = Math.floor(Date.now() / 1000); // Update time of the last tweet.
-      newTweet = generator.makeTweet(140); // Create a new tweet.
+      newTweet = generator.makeTweet(200); // Create a new tweet.
       tweet.postNewTweet(newTweet); // Post tweet.
       console.log(utils.currentTime(), newTweet + '');
     }
@@ -134,7 +134,7 @@ module.exports = {
     */
     if (Math.floor(Date.now() / 1000) - robotActions.lastTweet >= config.settings.postInterval) {
       robotActions.lastTweet = Math.floor(Date.now() / 1000); // Update time of the last tweet.
-      newTweet = generator.makeTweet(140); // Create a new tweet.
+      newTweet = generator.makeTweet(200); // Create a new tweet.
       tweet.postNewTweet(newTweet); // Post tweet.
       console.log(utils.currentTime(), newTweet + '');
     }
