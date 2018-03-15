@@ -1,4 +1,6 @@
 tweets.txt
+natbot-chat-history.txt
+tweets - originals.txt
 node_modules/
 .env
 .jshintrc

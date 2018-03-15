@@ -547,7 +547,7 @@ module.exports = {
     } 
 
 
-    if (tweetlength < 120) {
+    if (tweetlength < 280) {
       return gethashtag;
     }  
   },
@@ -589,7 +589,7 @@ module.exports = {
     }
 
 
-    if (tweetlength < 130) {
+    if (tweetlength < 270) {
       return emoji;
     }
   },
