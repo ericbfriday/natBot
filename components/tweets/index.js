@@ -8,6 +8,7 @@ var Twitter = require('twitter');
 var config = require('../../config');
 var generator = require('../generator');
 var utils = require('../utilities');
+var lodash = require('lodash');
 
 
 // Initialize a new Twitter client using the provided API keys.

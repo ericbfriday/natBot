@@ -1,6 +1,7 @@
 // TEXT GENERATOR!
-
+var _ = require('lodash');
 var config = require('../../config');
+
 
 module.exports = {
 
@@ -29,13 +30,11 @@ module.exports = {
         // This is something we actually want! We can check for "end" words and stuff later.
         // Example: ['Oh,', 'man.', 'I\'m', 'really', 'hungry!']
         var words = content[currentLine].split(' ');
-
         // We want our robot to sound intelligent, we track words that start each sentence (new line).
         // There are some cases where this currently falls apart. The above example is good. The only
         // startword that would be pushed to the array would be "Oh" and not "I'm", since we're not checking
         // for where sentences get split up.
         this.startwords.push(words[0]);
-
         // Now, we're going to iterate over all the words we've found in our currentLine,
         // which is all the stuff we pushed in the new words array up above. 
         // Let's start adding real data to our dictionary!
@@ -56,7 +55,6 @@ module.exports = {
 
             // Make sure our word isn't an empty value. No one likes that. Not even you.
             if (words[j] !== '' && checkValid === true) {
-
               // New method for tracking words...
               // TODO: This is a work in progress to improve how we're storing and 
               // referencing our word dictionary. WIP for v.2.0.0
@@ -107,20 +105,15 @@ module.exports = {
   },
 
   // Checks if the next word exists and adds it to the corpus dictionary.
-  // TODO: We're probably returning unnecessary space if a word doesn't exist. Need to fix.
   checkExists: function(value) {
-    if (!value) {
-      //return '';
-    } else {
-      return value;
-    }
+    return _.isNil(value) ? undefined : value;
   },
 
   checkSentenceEnd: function(word) {
 
     // Sometimes, an undefined value is passed in here and we need to properly handle it.
     // Let's just return from the function and do nothing.
-    if (word === undefined) {
+    if (_.isNil(word)) {
       return false;
     }
 
@@ -144,7 +137,7 @@ module.exports = {
     var allResults = [];
     var resultWordPair;
     var getResult;
-    if (secondWord === undefined || secondWord === null) {
+    if (_.isNil(secondWord)) {
       getResult = this.searchObject(this.wordpairs, 'first_word', firstWord);
       resultWordPair = getResult[Math.floor(Math.random() * getResult.length)];
       
@@ -195,41 +188,37 @@ module.exports = {
 
   // Clean up our content and remove things that result in poorly generated sentences.
   cleanContent: function(content) {
-    var cleaned = content;
-
-    cleaned.forEach(function(element, index) {
+    return content.map(function(element, index) {
       // Removing all sorts of weird content found in my tweets that screw this whole process up.
       // Really, I should just get better at RegEx
-      cleaned[index] = cleaned[index].replace(/(@\S+)/gi,''); // Try to remove any usernames
-      cleaned[index] = cleaned[index].replace(/(http\S+)/gi,''); // Try to remove any URLs
-      cleaned[index] = cleaned[index].replace(/^RT\W/gi,''); // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
-      cleaned[index] = cleaned[index].replace(/( RT )/gi,' '); // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
-      cleaned[index] = cleaned[index].replace(/( MT )/g,' '); // Remove "MT" -- though we're keeping the rest of the tweet. Should probably fix.
-      cleaned[index] = cleaned[index].replace(/^ +/gm, ''); // Remove any leading whitespace
-      cleaned[index] = cleaned[index].replace(/[ \t]+$/, ''); // Remove any trailing whitespace
-      cleaned[index] = cleaned[index].replace(/(&#8217;)/, '\''); // Convert HTML entity to apostrophe
-      cleaned[index] = cleaned[index].replace(/(&#8216;)/, '\''); // Convert HTML entity to apostrophe
-      cleaned[index] = cleaned[index].replace(/\W-$/g, ''); // Remove dashes at the end of a line that result from stripped URLs.
-      cleaned[index] = cleaned[index].replace(/&gt;/g, '>'); // Convert greater than signs
-      cleaned[index] = cleaned[index].replace(/&lt;/g, '<'); // Convert less than signs
-      cleaned[index] = cleaned[index].replace(/&amp;/g,'&'); // Convert HTML entity
-      cleaned[index] = cleaned[index].replace(/(\/cc)/gi, ''); // Remove "/cc" from tweets
-      cleaned[index] = cleaned[index].replace(/(\/via)/gi, ''); // Remove "/via" from tweets
-      cleaned[index] = cleaned[index].replace(/"/g, ''); // Remove quotes
-      cleaned[index] = cleaned[index].replace(/“/g, ''); // Remove quotes
-      cleaned[index] = cleaned[index].replace(/”/g, ''); // Remove quotes
-      cleaned[index] = cleaned[index].replace(/(\))/g, ''); // Hopefully remove parentheses found at end of a word, but not in emojis
-      cleaned[index] = cleaned[index].replace(/(\()/g, ''); // Hopefully remove parentheses found at the beginning of a word, but not in emojis
-      cleaned[index] = cleaned[index].replace(/(\\n)/gm,''); // Replace all commas in words with nothing.
-      //cleaned[index] = cleaned[index].replace(/(\...)/g,'…'); // Save characters and replace three periods… 
-      //cleaned[index] = cleaned[index].replace(/[\(]/g, ''); // Remove quotes TODO: figure out how to get rid of these without destroying emojis.  
+       return element.replace(/(@\S+)/gi,'') // Try to remove any usernames
+        .replace(/(http\S+)/gi,'') // Try to remove any URLs
+        .replace(/^RT\W/gi,'') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
+        .replace(/( RT )/gi,' ') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
+        .replace(/( MT )/g,' ') // Remove "MT" -- though we're keeping the rest of the tweet. Should probably fix.
+        .replace(/^ +/gm, '') // Remove any leading whitespace
+        .replace(/[ \t]+$/, '') // Remove any trailing whitespace
+        .replace(/(&#8217;)/, '\'') // Convert HTML entity to apostrophe
+        .replace(/(&#8216;)/, '\'') // Convert HTML entity to apostrophe
+        .replace(/\W-$/g, '') // Remove dashes at the end of a line that result from stripped URLs.
+        .replace(/&gt;/g, '>') // Convert greater than signs
+        .replace(/&lt;/g, '<') // Convert less than signs
+        .replace(/&amp;/g,'&') // Convert HTML entity
+        .replace(/(\/cc)/gi, '') // Remove "/cc" from tweets
+        .replace(/(\/via)/gi, '') // Remove "/via" from tweets
+        .replace(/"/g, '') // Remove quotes
+        .replace(/“/g, '') // Remove quotes
+        .replace(/”/g, '') // Remove quotes
+        .replace(/(\))/g, '') // Hopefully remove parentheses found at end of a word, but not in emojis
+        .replace(/(\()/g, '') // Hopefully remove parentheses found at the beginning of a word, but not in emojis
+        .replace(/(\\n)/gm,''); // Replace all commas in words with nothing.
+        // .replace(/(\...)/g,'…'); // Save characters and replace three periods… 
+        // .replace(/[\(]/g, ''); // Remove quotes TODO: figure out how to get rid of these without destroying emojis.  
     });
-
-    return cleaned;
   },
 
   makeTweet: function (min_length) {
-    if (this.startwords === undefined || this.startwords.length === 0) {
+    if (_.isNil(this.startwords) || this.startwords.length === 0) {
       return;
     }
 

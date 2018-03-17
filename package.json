@@ -15,7 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "3.5.1",
+    "browser-sync": "^2.23.6",
     "forever": "^0.15.3",
+    "lodash": "^4.17.5",
     "twitter": "1.7.1"
   }
 }

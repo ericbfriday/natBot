@@ -6,6 +6,7 @@
 // Import required npm modules to make our robot work!
 var fs = require('fs');
 var Promise = require('bluebird');
+var lodash = require('lodash');
 
 //////////
 var config = require('../../config'); // Robot config, personality settings and API keys
@@ -59,15 +60,17 @@ module.exports = {
       console.log('\nAnalyzing data and creating word corpus from file \'' + tweetFile + '\'');
       console.log('(This may take a few minutes to generate...)');
       //Split content into array, separating by line.
-      var content = fileContents.toString().split("\n");
+      var content = fileContents.toString().split("\n"); 
       return content;
     })
     .then(function(content){
       // Strip usernames and links from content
+      console.log('cleaning content');
       return generator.cleanContent(content);
     })
     .then(function(content){
       //Build word corpus using content array above.
+      console.log('building corpus');
       return generator.buildCorpus(content);
     })
     .then(function(data){
