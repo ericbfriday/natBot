@@ -142,7 +142,7 @@ module.exports = {
       resultWordPair = getResult[Math.floor(Math.random() * getResult.length)];
       
       //Trying to check for a weird undefined error that sometimes happens and crashes app:
-      if (typeof(resultWordPair) == "undefined") {
+      if (_.isNil(resultWordPair)) {
         //console.log('\n--== ERROR: No result returned... ==--\n')
         allResults[0] = '';
         allResults[1] = '';
@@ -156,7 +156,7 @@ module.exports = {
       allResults[2] = this.checkExists(resultWordPair.next_word);
 
       return allResults;    
-    } else if (secondWord === '') {
+    } else if (_.isEmpty(secondWord)) {
       // This means the second word does not exist. Uh, oh!
       //console.log('--== Second word pair not detected. ==--');
       allResults[0] = '';
@@ -169,7 +169,7 @@ module.exports = {
       resultWordPair = getResult[Math.floor(Math.random() * getResult.length)];
 
       //Trying to check for a weird undefined error that sometimes happens and crashes app:
-      if (typeof(resultWordPair) == "undefined") {
+      if (_.isNil(resultWordPair)) {
         //console.log('\n--== ERROR: No result returned... ==--\n')
         allResults[0] = '';
         allResults[1] = '';
@@ -191,11 +191,12 @@ module.exports = {
     return content.map(function(element, index) {
       // Removing all sorts of weird content found in my tweets that screw this whole process up.
       // Really, I should just get better at RegEx
-       return element.replace(/(@\S+)/gi,'') // Try to remove any usernames
-        .replace(/(http\S+)/gi,'') // Try to remove any URLs
-        .replace(/^RT\W/gi,'') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
-        .replace(/( RT )/gi,' ') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
-        .replace(/( MT )/g,' ') // Remove "MT" -- though we're keeping the rest of the tweet. Should probably fix.
+       return element
+        // .replace(/(@\S+)/gi,'') // Try to remove any usernames
+        // .replace(/(http\S+)/gi,'') // Try to remove any URLs
+        // .replace(/^RT\W/gi,'') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
+        // .replace(/( RT )/gi,' ') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
+        // .replace(/( MT )/g,' ') // Remove "MT" -- though we're keeping the rest of the tweet. Should probably fix.
         .replace(/^ +/gm, '') // Remove any leading whitespace
         .replace(/[ \t]+$/, '') // Remove any trailing whitespace
         .replace(/(&#8217;)/, '\'') // Convert HTML entity to apostrophe
@@ -206,19 +207,19 @@ module.exports = {
         .replace(/&amp;/g,'&') // Convert HTML entity
         .replace(/(\/cc)/gi, '') // Remove "/cc" from tweets
         .replace(/(\/via)/gi, '') // Remove "/via" from tweets
-        .replace(/"/g, '') // Remove quotes
-        .replace(/“/g, '') // Remove quotes
-        .replace(/”/g, '') // Remove quotes
-        .replace(/(\))/g, '') // Hopefully remove parentheses found at end of a word, but not in emojis
-        .replace(/(\()/g, '') // Hopefully remove parentheses found at the beginning of a word, but not in emojis
-        .replace(/(\\n)/gm,''); // Replace all commas in words with nothing.
+        // .replace(/"/g, '') // Remove quotes
+        // .replace(/“/g, '') // Remove quotes
+        // .replace(/”/g, '') // Remove quotes
+        // .replace(/(\))/g, '') // Hopefully remove parentheses found at end of a word, but not in emojis
+        // .replace(/(\()/g, '') // Hopefully remove parentheses found at the beginning of a word, but not in emojis
+        // .replace(/(\\n)/gm,''); // Replace all commas in words with nothing.
         // .replace(/(\...)/g,'…'); // Save characters and replace three periods… 
         // .replace(/[\(]/g, ''); // Remove quotes TODO: figure out how to get rid of these without destroying emojis.  
     });
   },
 
   makeTweet: function (min_length) {
-    if (_.isNil(this.startwords) || this.startwords.length === 0) {
+    if (_.isEmpty(this.startwords)) {
       return;
     }
 
@@ -231,7 +232,7 @@ module.exports = {
     tweet.push(initialWords[1]);
     tweet.push(initialWords[2]);
 
-    while (keepGoing === true) {  
+    while (keepGoing === true) {
       var getNewWords = this.choosePairs(tweet[tweet.length - 2],tweet[tweet.length - 1]);
       if (getNewWords[3] === 'end') break; // No more words detected. Stop, yo!
       
@@ -245,23 +246,23 @@ module.exports = {
         //console.log('REMOVING: ' + value);
         for(var i = array.length-1; i--;){
           if (array[i] === value) array.splice(i, 1);
-        }   
+        }
       }  
       return array; 
     };
 
-    // Try to remove some random crap that manages to sneak through my earlier filters.
-    // I need to be better at regex...
-    tweet = removeElements(tweet, '.');
-    tweet = removeElements(tweet, '-');
-    tweet = removeElements(tweet, 'RT');
-    tweet = removeElements(tweet, '/');
-    tweet = removeElements(tweet, ':');
-    tweet = removeElements(tweet, '[pic]:');
-    tweet = removeElements(tweet, '[pic]');
+    // // Try to remove some random crap that manages to sneak through my earlier filters.
+    // // I need to be better at regex...
+    // tweet = removeElements(tweet, '.');
+    // tweet = removeElements(tweet, '-');
+    // tweet = removeElements(tweet, 'RT');
+    // tweet = removeElements(tweet, '/');
+    // tweet = removeElements(tweet, ':');
+    // tweet = removeElements(tweet, '[pic]:');
+    // tweet = removeElements(tweet, '[pic]');
 
     // Filter our array of words to remove ALL empty values ("", null, undefined and 0):
-    tweet = tweet.filter(function(e){return e;}); 
+    tweet = tweet.filter(function(e){return !_.isEmpty(e);}); 
 
     //console.log(tweet);
     var wholeTweet = tweet.join(' ');
@@ -275,9 +276,9 @@ module.exports = {
     wholeTweet = wholeTweet.replace(/\,[ ]*$/g,'.'); // Remove comma if found at end of line.
     wholeTweet = wholeTweet.replace(/[ ](w\/)$/g,''); // Remove '/w' that sometimes gets attached to end of lines.
 
-    // For some reason, sometimes our sentence generation returns nothing.
-    // Detect if this happens and rerun the script again.
-    if (wholeTweet.length === 0) {
+    // Make sure our tweet is at least 35 characteres long. Otherwise we get inundated with
+    // one or two word tweets. 
+    if (wholeTweet.length <= 35) {
       wholeTweet = this.makeTweet(min_length);
     }
 
@@ -343,8 +344,8 @@ module.exports = {
         }
       }
 
-      //console.log('\nHighest ranked word in corpus is: \'' + highestWord + '\' and was found ' + count + ' times.');
-      //console.log(resultArray); 
+      console.log('\nHighest ranked word in corpus is: \'' + highestWord + '\' and was found ' + count + ' times.');
+      console.log(resultArray); 
       return resultArray;
     }
 
@@ -444,12 +445,12 @@ module.exports = {
     }
 
     do {
-      var randomLength = Math.floor((Math.random() * 20) + 10); // Random length between 10 and 20 words.
+      var randomLength =_.random(10, 30); // Random length between 10 and 30 words.
       new_tweet = this.makeTweet(randomLength);
       new_tweet = username + new_tweet + this.attachHashtag(new_tweet.length); // Randomly add a hashtag
       new_tweet = new_tweet + this.attachEmoji(new_tweet.length); // Randomy add an emoji
 
-    } while (new_tweet.length > 140);
+    } while (new_tweet.length > 280);
 
     // TODO: This is a stupid, hacky way to fix weird messages that only say "RT" every so often.
     if (new_tweet == "RT") {
