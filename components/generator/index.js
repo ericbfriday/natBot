@@ -240,16 +240,16 @@ module.exports = {
       if (this.checkSentenceEnd(getNewWords[2]) === true) break; // Check if the end of the word contains a sentence ending element.
     }
 
-    // Remove undesireable elements from our array
-    var removeElements = function(array, value) {
-      if (array.indexOf(value) !== -1) {
-        //console.log('REMOVING: ' + value);
-        for(var i = array.length-1; i--;){
-          if (array[i] === value) array.splice(i, 1);
-        }
-      }  
-      return array; 
-    };
+    // // Remove undesireable elements from our array
+    // var removeElements = function(array, value) {
+    //   if (array.indexOf(value) !== -1) {
+    //     //console.log('REMOVING: ' + value);
+    //     for(var i = array.length-1; i--;){
+    //       if (array[i] === value) array.splice(i, 1);
+    //     }
+    //   }  
+    //   return array; 
+    // };
 
     // // Try to remove some random crap that manages to sneak through my earlier filters.
     // // I need to be better at regex...
