@@ -1,35 +1,35 @@
-/** 
+'use strict';
+/**
  *  Utilities and Helper Functions
- *  
  */
 
 var config = require('../../config');
 var tweet = require('../tweets');
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = {
-  // Useful for outputting timestamps to the console for actions from our robot.
-  currentTime: function() {
-    // Create a new Javascript Date object based on the timestamp
-    // Based on following solution: http://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
-    var date = new Date(Date.now());
-    
-    // hours part from the timestamp
-    var hours = date.getHours();
-    
-    // minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    
-    // seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
+    // Useful for outputting timestamps to the console for actions from our robot.
+    currentTime: function () {
+        // Create a new Javascript Date object based on the timestamp
+        // Based on following solution: http://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+        var date = new Date(Date.now());
 
-    var year = date.getFullYear();
-    var month = "0" + (date.getMonth() + 1);
-    var day = "0" + date.getDate();
+        // hours part from the timestamp
+        var hours = date.getHours();
 
-    //2015-09-30 00:00:00
-    var formattedTime = year + '-' + month.substr(-2) + '-' + day.substr(-2) + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        // minutes part from the timestamp
+        var minutes = '0' + date.getMinutes();
 
-    return formattedTime;
-  }
+        // seconds part from the timestamp
+        var seconds = '0' + date.getSeconds();
+
+        var year = date.getFullYear();
+        var month = '0' + (date.getMonth() + 1);
+        var day = '0' + date.getDate();
+
+        //2015-09-30 00:00:00
+        var formattedTime = year + '-' + month.substr(-2) + '-' + day.substr(-2) + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+        return formattedTime;
+    }
 };

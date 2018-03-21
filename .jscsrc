@@ -1,0 +1,30 @@
+{
+  "disallowMixedSpacesAndTabs": true,
+  "disallowMultipleLineBreaks": true,
+  "disallowMultipleLineStrings": true,
+  "disallowNamedUnassignedFunctions": true,
+  "disallowNewlineBeforeBlockStatements": true,
+  "disallowTrailingWhitespace": true,
+  "maximumNumberOfLines": 700,
+  "requireCapitalizedConstructors": {
+    "allExcept": [""]
+  },
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireParenthesesAroundIIFE": true,
+  "requireSemicolons": true,
+  "safeContextKeyword": [
+    "that",
+    "vm",
+    "mainVm"
+  ],
+  "validateParameterSeparator": ", ",
+  "validateIndentation": 4
+}
