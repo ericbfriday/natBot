@@ -3,9 +3,9 @@
  *  Utilities and Helper Functions
  */
 
-var config = require('../../config');
-var tweet = require('../tweets');
-var _ = require('lodash');
+// var config = require('../../config');
+// var tweet = require('../tweets');
+// var _ = require('lodash');
 
 module.exports = {
     // Useful for outputting timestamps to the console for actions from our robot.

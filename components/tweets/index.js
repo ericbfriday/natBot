@@ -95,13 +95,13 @@ module.exports = {
     checkReply: function (tweet) {
         var checkTweet = tweet.text.toLowerCase();
         var myUsername = '@' + config.settings.robotName.toLowerCase();
-        //var randomReply = false; // Initial condition that makes bot decide whether or not to reply to someone in its feed.
+        var randomReply = config.settings.randomReplies; // Initial condition that makes bot decide whether or not to reply to someone in its feed.
         var replyID = tweet.id_str; // Get the ID of the tweet so we can properly reply to it.
         var replyUsername = tweet.user.screen_name;
         var replyCount = 0;
         // Randomly reply to tweets that pop up in our stream.
         var x = Math.random(); // Generate random number to determine whether we will reply or not
-        if (config.settings.randomReplies && x <= config.settings.randomRepliesChance && checkTweet.indexOf(myUsername) == -1 && (typeof tweet.retweeted_status === 'undefined')) {
+        if (config.settings.randomReplies && x <= config.settings.randomRepliesChance && checkTweet.indexOf(myUsername) === -1 && (_.isNil(tweet.retweeted_status))) {
             //replyCount = this.countReplies(replyUsername); // Get the number of times we've recently replied to this user.
             // Prevent robot from going into a reply loop with itself and imploding the universe!
             if (replyUsername.toLowerCase() !== config.settings.robotName.toLowerCase() && replyCount < 5) {
@@ -112,11 +112,11 @@ module.exports = {
             }
         }
         // Check if the tweet is a retweet so we don't gum up our replies with crazy username garbage.
-        if (typeof tweet.retweeted_status !== 'undefined') {
+        if (!_.isNil(typeof tweet.retweeted_status)) {
             console.log('\n\n\n!!!!!!!!!!!!  ALERT: RETWEET!!!!!\n\n\n'); //jshint ignore: line
         }
         // Build a standard reply to a user who mentions us.
-        if (checkTweet.indexOf(myUsername) != -1 && (typeof tweet.retweeted_status == 'undefined')) {
+        if (checkTweet.indexOf(myUsername) !== -1 && (_.isNil(tweet.retweeted_status))) {
             var tempUserArray = []; // Keep track of all the users mentioned in this tweet.
             var tempAdditionalUsers; // We'll use this to generate a string of additional users.
             // Checks tweet for any additional mentions and adds them to a temporary array.

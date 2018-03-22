@@ -7,7 +7,7 @@
 // Import required npm modules to make our robot work!
 var fs = require('fs');
 var Promise = require('bluebird');
-var _ = require('lodash');
+// var _ = require('lodash');
 
 //////////
 var config = require('../../config'); // Robot config, personality settings and API keys
