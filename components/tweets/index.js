@@ -95,7 +95,7 @@ module.exports = {
     checkReply: function (tweet) {
         var checkTweet = tweet.text.toLowerCase();
         var myUsername = '@' + config.settings.robotName.toLowerCase();
-        var randomReply = config.settings.randomReplies; // Initial condition that makes bot decide whether or not to reply to someone in its feed.
+        // var randomReply = config.settings.randomReplies; // Initial condition that makes bot decide whether or not to reply to someone in its feed.
         var replyID = tweet.id_str; // Get the ID of the tweet so we can properly reply to it.
         var replyUsername = tweet.user.screen_name;
         var replyCount = 0;
@@ -112,8 +112,9 @@ module.exports = {
             }
         }
         // Check if the tweet is a retweet so we don't gum up our replies with crazy username garbage.
-        if (!_.isNil(typeof tweet.retweeted_status)) {
+        if (!_.isNil(tweet.retweeted_status)) {
             console.log('\n\n\n!!!!!!!!!!!!  ALERT: RETWEET!!!!!\n\n\n'); //jshint ignore: line
+            // console.log('tweet.retweeted_status' + tweet.retweeted_status); //jshint ignore: line
         }
         // Build a standard reply to a user who mentions us.
         if (checkTweet.indexOf(myUsername) !== -1 && (_.isNil(tweet.retweeted_status))) {
