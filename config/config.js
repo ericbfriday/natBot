@@ -46,14 +46,18 @@ module.exports = {
         // If true, have the bot randomly reply to tweets that
         // appear in its stream.
         // Default: false
-        randomReplies: true,
+        randomReplies: false,
 
         // If true, we can repspond to replies!
-        respondReplies: true,
+        respondReplies: false,
 
         // If true, let the robot post to Twitter.
         // False prevents it from outputting to Twitter.
         postTweets: true,
+
+        // If true, censors the bot based on topics.
+        // True means censorship is enforced.
+        censorBot: true,
 
         // If true, allow the bot to favorite tweets
         // based on the robot's personality settings (see below).
@@ -66,11 +70,11 @@ module.exports = {
         canFavoriteTweets: true,
 
         /**
-         ** Create an array of replies that we'll wipe out every so often.
-            ** Basically, if we've replied to the same user more than X amount
-            ** of times within a certain time frame, let's not reply to them
-            ** anymore for a bit in order to keep everyone's sanity.
-            **/
+        ** Create an array of replies that we'll wipe out every so often.
+        ** Basically, if we've replied to the same user more than X amount
+        ** of times within a certain time frame, let's not reply to them
+        ** anymore for a bit in order to keep everyone's sanity.
+        **/
         trackReplies: [],
     },
 
@@ -99,26 +103,31 @@ module.exports = {
         // These are case insensitive
         ignoredHashtags: ['Trump', 'politics', '911', 'democrats', 'republicans', 'pence', 'discourse'],
 
+        // List of items to prevent bot from leaking personal information or anything too vulgar.
+        // Vulgar being a very relative term.
+        // These are case insensitive.
+        censoredWords: ['https://drive.google.com'],
+
         /* Percent chance that the bot will add additional emojis
             ** to the end of a tweet. e.g., .3 = 30%.
             */
         addEmojis: 0.2,
 
         /* Percent chance that the bot will add additional hashtags
-            ** to the end of a tweet. e.g., .2 = 20%.
-            */
+        ** to the end of a tweet. e.g., .2 = 20%.
+        */
         addHashtags: 0.4,
 
         /* Check whether or not our bot is allowed to randomly reply to other
-            ** users on its own.
-            ** Default: false
-            */
+        ** users on its own.
+        ** Default: false
+        */
         randomReplies: true,
 
         /* Percent chance that the bot will randomly reply
-            *  to tweets that pop up in its stream. e.g., .05 = 5%
-            *  You'll probably want to keep random replies at 0.
-            */
+        *  to tweets that pop up in its stream. e.g., .05 = 5%
+        *  You'll probably want to keep random replies at 0.
+        */
         randomRepliesChance: 0.01,
     }
 };

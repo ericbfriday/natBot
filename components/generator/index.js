@@ -26,7 +26,7 @@ module.exports = {
         // Example: content[currentLine] === "Oh, man. I'm really hungry!"
         for (var currentLine = 0; currentLine < content.length; currentLine++) {
 
-            // In order to start properly building our corpus of processed text, 
+            // In order to start properly building our corpus of processed text,
             // we're going to need to split up each word in our sentence individually into an array.
             // Since we're splitting on spaces between words, this will attach punctuation marks and the like.
             // This is something we actually want! We can check for "end" words and stuff later.
@@ -38,7 +38,7 @@ module.exports = {
             // for where sentences get split up.
             this.startwords.push(words[0]);
             // Now, we're going to iterate over all the words we've found in our currentLine,
-            // which is all the stuff we pushed in the new words array up above. 
+            // which is all the stuff we pushed in the new words array up above.
             // Let's start adding real data to our dictionary!
             for (var j = 0; j < words.length - 1; j++) {
                 var checkValid = true; // Flag to check whether a value is true or false.
@@ -56,7 +56,7 @@ module.exports = {
                 // Make sure our word isn't an empty value. No one likes that. Not even you.
                 if (words[j] !== '' && checkValid === true) {
                     // New method for tracking words...
-                    // TODO: This is a work in progress to improve how we're storing and 
+                    // TODO: This is a work in progress to improve how we're storing and
                     // referencing our word dictionary. WIP for v.2.0.0
                     // Check if the word even exists in our array.
                     // If not, let's add it and then build in our template.
@@ -74,7 +74,7 @@ module.exports = {
                         this.dictionary[words[j]].prev_words.push(this.checkExists(words[j - 1]));
                     }
 
-                    // NOTE: This is the current way we're storing data in our word dictionary. 
+                    // NOTE: This is the current way we're storing data in our word dictionary.
                     // We simply add this object to an array. This means multiple objects will exist
                     // that feature the same object. It's really inefficient and long term, I want to
                     // improve how this works.
@@ -191,7 +191,9 @@ module.exports = {
             // Really, I should just get better at RegEx
             return element
                 .replace(/(@\S+)/gi, '') // Try to remove any usernames
-                // .replace(/(http\S+)/gi,'') // Try to remove any URLs
+                .replace(/\S*@\S*\s?/, '*redaced email*') // Try to strip out e-mail addresses
+                .replace(/https:\/\/drive.google.com\S*/, '') // remove google drive shares
+                .replace(/https:\/\/open.spotify.com\S*/, '') // remove spotify links
                 // .replace(/^RT\W/gi,'') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
                 // .replace(/( RT )/gi,' ') // Remove "RT" -- though we're keeping the rest of the tweet. Should probably fix.
                 // .replace(/( MT )/g,' ') // Remove "MT" -- though we're keeping the rest of the tweet. Should probably fix.
@@ -204,15 +206,18 @@ module.exports = {
                 .replace(/&lt;/g, '<') // Convert less than signs
                 .replace(/&amp;/g, '&') // Convert HTML entity
                 .replace(/(\/cc)/gi, '') // Remove "/cc" from tweets
-                .replace(/(\/via)/gi, ''); // Remove "/via" from tweets
-            // .replace(/"/g, '') // Remove quotes
-            // .replace(/“/g, '') // Remove quotes
-            // .replace(/”/g, '') // Remove quotes
+                .replace(/(\/via)/gi, '') // Remove "/via" from tweets
+                .replace(/https:\/\/twitter.com\/realDonaldTump\S*/, '') // No trump tweets per request of our muse.
+                .replace(/https:\/\/www.groupon.com\S*/, '') // No Groupons, either!
+                .replace(/https:\/\/media.discordapp.net\S*/, '') // No Groupons, either!
+                .replace(/https:\/\/photos.app.goo.gl\/\S*/, '') // No google photos!
+                .replace(/https:\/\/cdn.discordapp.com\S*/), // remove discord links
+                .replace(/QoTDâ€™s/, 'QoTDs');
             // .replace(/(\))/g, '') // Hopefully remove parentheses found at end of a word, but not in emojis
             // .replace(/(\()/g, '') // Hopefully remove parentheses found at the beginning of a word, but not in emojis
             // .replace(/(\\n)/gm,''); // Replace all commas in words with nothing.
-            // .replace(/(\...)/g,'…'); // Save characters and replace three periods… 
-            // .replace(/[\(]/g, ''); // Remove quotes TODO: figure out how to get rid of these without destroying emojis.  
+            // .replace(/(\...)/g,'…'); // Save characters and replace three periods…
+            // .replace(/[\(]/g, ''); // Remove quotes TODO: figure out how to get rid of these without destroying emojis.
         });
     },
 
@@ -257,7 +262,7 @@ module.exports = {
             .replace(/[ ](w\/)$/g, ''); // Remove '/w' that sometimes gets attached to end of lines.
 
         // Make sure our tweet is at least 35 characteres long. Otherwise we get inundated with
-        // one or two word tweets. 
+        // one or two word tweets.
         if (wholeTweet.length <= 35) {
             wholeTweet = this.makeTweet(min_length);
         }
